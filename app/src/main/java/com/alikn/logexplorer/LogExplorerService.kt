@@ -1,4 +1,4 @@
-package com.alikn.logexplorer;
+package com.alikn.logexplorer
 
 import android.R
 import android.app.Notification
@@ -24,14 +24,14 @@ class LogExplorerService : Service() {
     val channel = NotificationChannel("log_explorer_channel_id", name, importance).apply {
         this.description = notificationDescription
     }
+    lateinit var notificationManager: NotificationManager
 
     override fun onCreate() {
         super.onCreate()
         val channelId = "my_service"
         val channelName = "My Background Service"
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        val chan =
-                NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_NONE)
+        val chan = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_NONE)
             notificationManager.createNotificationChannel(chan)
         val notificationBuilder = Notification.Builder(this, channelId)
             .setContentTitle("Service is Running")
@@ -76,12 +76,15 @@ class LogExplorerService : Service() {
 
     private fun createNotificationChannel(log: String) {
 
-        if(log.contains("Exception")){
-            val notificationManager = getSystemService(
-                NotificationManager::class.java
-            ).apply {
-                this.createNotificationChannel(channel)
+        if(log.contains("Exception")) {
+            if(!::notificationManager.isInitialized){
+                notificationManager = getSystemService(
+                    NotificationManager::class.java
+                ).apply {
+                    this.createNotificationChannel(channel)
+                }
             }
+
             val builder: NotificationCompat.Builder = NotificationCompat.Builder(this, "log_explorer_channel_id")
                 .setSmallIcon(R.drawable.ic_dialog_alert) // Replace with your own drawable resource
                 .setContentTitle("Exception logs")
