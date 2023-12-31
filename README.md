@@ -1,6 +1,9 @@
+Purpose of this library:
+during development and testing, when crash happens, you will get a notification autonatically and won't need to search the logcat.
+
 How to setup:
 
-Add         
+Add:
 
 Logexplorer.monitorLogs(this@MainActivity)
 
